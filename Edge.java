@@ -1,10 +1,4 @@
-package edu.sjsu.cmpe202.pratiksanglikar.beans;
 
-/**
- * This class represents an edge for representing two classes aka {@link Node}.
- * @author pratiksanglikar
- *
- */
 public class Edge {
 	
 	private Node source;
