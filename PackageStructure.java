@@ -1,13 +1,8 @@
-package edu.sjsu.cmpe202.pratiksanglikar.beans;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * This class represents structure of the package including nodes, edges and packageName.
- * @author pratiksanglikar
- *
- */
 public class PackageStructure {
 	private String packageName;
 	private List<Node> nodes;
