@@ -31,10 +31,12 @@ public class Node {
 		this.fields = fields;
 	}
 
-	public List<MethodDeclaration> getMethods() {
+	
+        public List<MethodDeclaratoin> getMethods()
+	{
 		return methods;
 	}
-
+	
 	public void setMethods(List<MethodDeclaration> methods) {
 		this.methods = methods;
 	}
