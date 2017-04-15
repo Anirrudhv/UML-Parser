@@ -37,12 +37,7 @@ public class PackageStructure {
 		this.packageName = packageName;
 	}
 
-	/**
-	 * returns an object of {@link Node} for given nodeName;
-	 * @param name - typeName
-	 * @return  <b>node</b> of provided name
-	 * 			<b>null</b> if node with given name is not present in the packageStructure.
-	 */
+	
 	public Node getNodeByName(String name) {
 		for (Node node : nodes) {
 			if(node.getTypeName().equals(name)){
@@ -52,14 +47,7 @@ public class PackageStructure {
 		return null;
 	}
 	
-	/**
-	 * returns edge of edgeType between provided source and destination if present.
-	 * @param source
-	 * @param destination
-	 * @param edgeType
-	 * @return 	<b>edge</b> between source and destination of type edgeType.
-	 * 			<b>'null'</b> if edge with provided specifications is not present in the packageStructure.
-	 */
+	
 	public Edge getEdge(String source, String destination, EdgeType edgeType){
 		for (Edge edge : edges) {
 			if(edge.getSource().getTypeName().equals(source) &&
