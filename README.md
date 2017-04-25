@@ -8,6 +8,7 @@ UML parser is an application used to generate UML class diagram for Java class
 1.java parser
 2.plant UML
 3.Graph viz
+4.Astah for Sequence
 
 # status
 Done with class diagram 
