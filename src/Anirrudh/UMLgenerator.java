@@ -175,6 +175,7 @@ class Field extends VoidVisitorAdapter {
     	String str = decl.getType().toString();
     	boolean flag =false;
     	System.out.println(UMLgenerator.classname);
+    	// class
     	System.out.println(UMLgenerator.list);
     	if(UMLgenerator.list.contains(str))
         	{
@@ -191,7 +192,8 @@ class Field extends VoidVisitorAdapter {
     			System.out.println("existing class");
     		else if(UMLgenerator.first.contains(" " + UMLgenerator.list.get(i) + " - \"1\" " + UMLgenerator.classname ) && flag == false)
     		{
-    	
+    	// one to one 
+    			
     			UMLgenerator.first.replace(UMLgenerator.list.get(i) + " - \"1\" " + UMLgenerator.classname, UMLgenerator.list.get(i) + "\"1\" - \"1\" " + UMLgenerator.classname);
     		}
     		
@@ -201,12 +203,14 @@ class Field extends VoidVisitorAdapter {
     			UMLgenerator.first.replace(UMLgenerator.list.get(i) + " - \"1\" " + UMLgenerator.classname, UMLgenerator.list.get(i) + "\"*\" - \"1\" " + UMLgenerator.classname);
     		}
     		
+    		// one to many and many to one
     		else if(UMLgenerator.first.contains(UMLgenerator.list.get(i) + " - \"*\" " + UMLgenerator.classname ) && flag == false)
     		{
     			
     			UMLgenerator.first.replace(UMLgenerator.list.get(i) + " - \"*\" " + UMLgenerator.classname, UMLgenerator.list.get(i) + "\"1\" - \"*\" " + UMLgenerator.classname);
     		}
     	
+    		
     		else if(UMLgenerator.first.contains( UMLgenerator.list.get(i) + " - \"*\" " + UMLgenerator.classname ) && flag == true)
     		{
     			
@@ -246,7 +250,7 @@ class Field extends VoidVisitorAdapter {
         	 else
         		 strs[0]="-" ;
         	 
-         }
+         }//checking private varibale
          /* if(UMLgenerator.mlist.contains("set"+strs[2]) 
           * if (UMLgenerator.mlist.contains("get"+strs[2]))*/
          //private variable
@@ -284,20 +288,20 @@ class PlantumlTest {
 		
 		OutputStream png = null;
 		try {
-			png = new FileOutputStream(path+"//anirrudh.jpeg");
+			png = new FileOutputStream(path+"//test.jpeg");
 		} catch (FileNotFoundException excep) {
 		
 			excep.printStackTrace();
 		}
 			SourceStringReader reader = new SourceStringReader(source);
-		// Write the first image 
+		// initiate the image 
 		try {
 			reader.generateImage(png);
 		} catch (IOException excep) {
 			
 			excep.printStackTrace();
 		}
-		// Return a null string if no generation
+		// Return nothing if empty
 		//graph viz required 
 	}
 }
@@ -312,18 +316,20 @@ class ConstructorFinder extends VoidVisitorAdapter {
     	{
     	for(Parameter par : decl.getParameters())
     	{	System.out.println("classname:"+UMLgenerator.classname);
-    		System.out.println("x:"+par.toString());
-    		
+ // constuctor 
+    	System.out.println("x:"+par.toString());
+    		// s.o.p ("" + .)
     		if(p != null)
     		p = p + "," + par.toString();
     		else 
     			p = par.toString();
-    	String check =  par.getType().toString();
-    	System.out.println("check :"+check);
-    	if(UMLgenerator.list.contains(check))
+    	String csfin =  par.getType().toString();
+    	System.out.println("check :"+csfin);
+    	// check string
+    	if(UMLgenerator.list.contains(csfin))
     	{
-    		if(!UMLgenerator.first.contains(check + "<.. "  + UMLgenerator.classname + ":uses")&& UMLgenerator.ilist.contains(check)&& !UMLgenerator.ilist.contains(UMLgenerator.classname))
-    			UMLgenerator.first = UMLgenerator.first + check + "<.. "  + UMLgenerator.classname + ":uses" + "\n";
+    		if(!UMLgenerator.first.contains(csfin + "<.. "  + UMLgenerator.classname + ":uses")&& UMLgenerator.ilist.contains(csfin)&& !UMLgenerator.ilist.contains(UMLgenerator.classname))
+    			UMLgenerator.first = UMLgenerator.first + csfin + "<.. "  + UMLgenerator.classname + ":uses" + "\n";
     	}
     	}	
     	}
@@ -345,8 +351,16 @@ public class UMLgenerator
 public static  List<String> list = new ArrayList<String>();
 public static  List<String> ilist = new ArrayList<String>();
 public static  List<String> mlist = new ArrayList<String>();
+/*
+ * listsprivate List<FieldDeclaration> fields;
+	private List<MethodDeclaration> methods;
+	private List<ConstructorDeclaration> constructors;
+ * 
+ */
 public static  String first = "@startuml\n";
 public static String classname;
+
+//firist = first + skip graphviz
 public static void main(String[] args) throws IOException, ParseException 
 {
 		
@@ -376,9 +390,12 @@ while ( i < listf.length )
 					FileInputStream input = new FileInputStream(child.getAbsolutePath());
 					CompilationUnit c;
 					
+					// file stream
+					
 					try {
 					
 						c = JavaParser.parse(input);
+						//japa
 						
 					}
 						
@@ -392,13 +409,17 @@ while ( i < listf.length )
 					String delimiters = "[ .,?!]+";
 					String[] tokens = lines[0].split(delimiters);
 					List types = c.getTypes();
+					//delimitters set
 					
 					TypeDeclaration typeDec = (TypeDeclaration) types.get(0);
 					classname = typeDec.getName();
 					if(tokens[1].equals("interface"))
 						first = first + "interface" + " " + classname + "\n";
+					// first += "interface"
+					// +Classname
 			        if(tokens[1].equals("class"))
 			        	first = first + "class" + " " + classname + "\n";
+		// first += class+..+
 			        new Interface().visit(c, null);
 			        new name().visit(c, null);
 			        new UMLmethod().visit(c, null);
@@ -413,4 +434,5 @@ while ( i < listf.length )
 		}
 	}
 
+//e
 }
