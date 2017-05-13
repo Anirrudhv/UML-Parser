@@ -43,19 +43,11 @@ class Interface extends VoidVisitorAdapter
 						&& !UMLgenerator.first.contains
 //if(!UMLgenerator.first.contains( str + "<|.. "  + UMLgenerator.classname )
 						//if( !UMLgenerator.first.contains)						
-						( str + "<.. "  + UMLgenerator.classname + ":uses" ))
+						( str + "<.. "  + UMLgenerator.classname  ))
 					UMLgenerator.first = UMLgenerator.first + str + " " + "<|.. " + " " + 
 						UMLgenerator.classname +  "\n";
-			}
-		
-	      
-		 
+		 }
 	   }
-     
-
-
-
-	
 }
 class name extends VoidVisitorAdapter {
 
@@ -79,8 +71,9 @@ class name extends VoidVisitorAdapter {
 	      
 	      
 	   }
-     
+    
 }
+
 class UMLmethod extends VoidVisitorAdapter {
 
 
@@ -141,10 +134,10 @@ class UMLmethod extends VoidVisitorAdapter {
     	
     	if(UMLgenerator.list.contains(ch))
     	{
-    		if(!UMLgenerator.first.contains(ch + "<.. "  + UMLgenerator.classname + ":uses") 
+    		if(!UMLgenerator.first.contains(ch + "<.. "  + UMLgenerator.classname ) 
     				&& UMLgenerator.ilist.contains(ch) 
     				&& !UMLgenerator.ilist.contains(UMLgenerator.classname))//note
-    	UMLgenerator.first = UMLgenerator.first + ch + "<.. "  + UMLgenerator.classname + ":uses" + "\n";
+    	UMLgenerator.first = UMLgenerator.first + ch + "<.. "  + UMLgenerator.classname + "\n";
     	}
     	}	
     	}
@@ -265,8 +258,7 @@ class Field extends VoidVisitorAdapter {
          String rep2 = "set" + strs[2];
 //protected variable    
       //s = s.replaceAll(pattern, "");
-         UMLgenerator.first = UMLgenerator.first.replaceAll( ".*"+rep1+".*(\r?\n|\r)?", "" );
-         UMLgenerator.first = UMLgenerator.first.replaceAll( ".*"+rep2+".*(\r?\n|\r)?", "" );
+         
       
        
          }
@@ -276,34 +268,9 @@ class Field extends VoidVisitorAdapter {
 			System.out.println("Correct usage: java -jar <jarname.jar> <classpath> <outputfilename>");
 			System.out.println("Note:\t\tClasspath has to be relative.\n\t\toutfilename should not contain extension");*/
          
-         super.visit(decl, arguement);
     }
     
     
-
-}
-class PlantumlTest {
-	public  void umlCreator(String source , String path) {
-		
-		
-		OutputStream png = null;
-		try {
-			png = new FileOutputStream(path+"//test.jpeg");
-		} catch (FileNotFoundException excep) {
-		
-			excep.printStackTrace();
-		}
-			SourceStringReader reader = new SourceStringReader(source);
-		// initiate the image 
-		try {
-			reader.generateImage(png);
-		} catch (IOException excep) {
-			
-			excep.printStackTrace();
-		}
-		// Return nothing if empty
-		//graph viz required 
-	}
 }
 class ConstructorFinder extends VoidVisitorAdapter {
 
@@ -345,6 +312,34 @@ class ConstructorFinder extends VoidVisitorAdapter {
 
 
 
+
+    
+   
+class PlantumlTest {
+	public  void umlCreator(String source , String path) {
+		
+		
+		OutputStream png = null;
+		try {
+			png = new FileOutputStream(path+"/result.jpeg");
+		} catch (FileNotFoundException excep) {
+		
+			excep.printStackTrace();
+		}
+			SourceStringReader reader = new SourceStringReader(source);
+		// initiate the image 
+		try {
+			reader.generateImage(png);
+		} catch (IOException excep) {
+			
+			excep.printStackTrace();
+		}
+		// Return nothing if empty
+		//graph viz required 
+	}
+}
+
+
 public class UMLgenerator 
 {
 
@@ -371,11 +366,13 @@ File[] listf = f.listFiles();
 while ( i < listf.length ) 
 {
 		       
-		       String  s= listf[i].getName();
+		       String  s ;
+		       s= listf[i].getName();
 		       s = s.replaceAll(".java", "");
 		       list.add(s);
-		       s="Collection<"+s+">";
+		       
 		       list.add(s);
+		      s= listf[i].getName(); 
 		       i++;
 		       //System.out.println("print------");
 		       //checking arguments and ignoring if not reaching the constraint
@@ -405,31 +402,32 @@ while ( i < listf.length )
 							
 				        }
 					String temp = c.toString();
-					String lines[] = temp.split("\\r?\\n");
+				
 					String delimiters = "[ .,?!]+";
-					String[] tokens = lines[0].split(delimiters);
+					
 					List types = c.getTypes();
 					//delimitters set
-					
+					String lines[] = temp.split("\\r\\n");
 					TypeDeclaration typeDec = (TypeDeclaration) types.get(0);
 					classname = typeDec.getName();
+					String[] tokens = lines[0].split(delimiters);
 					if(tokens[1].equals("interface"))
 						first = first + "interface" + " " + classname + "\n";
 					// first += "interface"
 					// +Classname
 			        if(tokens[1].equals("class"))
-			        	first = first + "class" + " " + classname + "\n";
-		// first += class+..+
-			        new Interface().visit(c, null);
-			        new name().visit(c, null);
+			        	first = first + "class" + " " + classname + "\n";       new name().visit(c, null);
 			        new UMLmethod().visit(c, null);
-			        new Field().visit(c, null);
+		// first += class+..+
+			 
+			        new Interface().visit(c, null);
+			        
 			        new ConstructorFinder().visit(c, null);
-				}
-			}
-			first = first + "@enduml\n";
+				
+			new Field().visit(c, null);
+				}}first = first + "@enduml\n";
 			    PlantumlTest p = new PlantumlTest();
-			    p.umlCreator(first,args[0]);
+			    p.umlCreator(first,args[1]);
 			    System.out.println(first); 
 		}
 	}
